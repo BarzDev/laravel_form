@@ -85,4 +85,29 @@ class BookingController extends Controller
 
         return redirect()->route('index')->with('success', 'Booking deleted successfully!');
     }
+
+    public function apiData()
+    {
+        //  return response()->json(['message' => 'API Connected!']);
+        $bookings = Booking::all();
+
+        return response()->json($bookings);
+    }
+
+    public function apiStore(Request $request)
+    {
+        Booking::create($request->validate([
+            'name' => 'required',
+            'phone' => 'required|max:14',
+            'booking_date' => 'required|date',
+            'type' => 'required'
+        ]));
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking received!',
+            'data' => $request->all()
+        ]);
+    }
+
 }
